@@ -40,9 +40,13 @@ class MyFrame < Wx::Frame
   def submit(event)
     letters = @my_textbox.get_value()
 	@my_textbox.set_value('')
-    new_filename = "training_dataset/#{letters}.jpg"
-    #md = Wx::MessageDialog.new(nil, "Identified as #{letters}", "Information", Wx::ICON_INFORMATION)
-    #md.show_modal
+	
+	directory_name = Dir::pwd + "/" + "training_dataset"
+    unless FileTest::directory?(directory_name)
+      Dir::mkdir(directory_name)
+    end
+	
+	new_filename = "#{directory_name}/#{letters}.jpg"
 	File.rename(@filename, new_filename)
 	check_more_training()
 	begin

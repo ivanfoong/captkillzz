@@ -2,7 +2,7 @@ require 'nokogiri'
 require 'net/http'
 require 'uri'
 
-dir = 'samples'
+dir = 'raw_dataset'
 Dir::mkdir(dir)
 
 the_uri = URI.parse('http://www.sbstransit.com.sg');

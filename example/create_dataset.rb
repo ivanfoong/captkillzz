@@ -13,7 +13,6 @@ unless FileTest::directory?(tmp_directory_name)
   Dir::mkdir(tmp_directory_name)
 end
 
-i = 0
 Dir.chdir('training_dataset')
 Dir.glob('*') { |file|
   
@@ -135,7 +134,7 @@ Dir.glob('*') { |file|
 
   # saving each of those letter images into dataset folders
   [0,1,2].each { |index|
-    if letters.size > index
+    if letters.size > index and letters[index].width <= 20  and letters[index].height <= 30
       char = file[index, 1]
       fixed_image = ChunkyPNG::Image.new(20, 30, ChunkyPNG::Color::WHITE)
       fixed_image.compose! letters[index]
@@ -148,10 +147,9 @@ Dir.glob('*') { |file|
 	  unless FileTest::directory?(dataset_sub_directory_name)
         Dir::mkdir(dataset_sub_directory_name)
       end
-	  output_filename = dataset_sub_directory_name  + i.to_s + '.png'
+	  output_filename = dataset_sub_directory_name  + "#{Time.now.to_i().to_s()}.png"
 	  puts 'writing to ' + output_filename
       fixed_image.save(output_filename)
     end
   }
-  i += 1
 }
