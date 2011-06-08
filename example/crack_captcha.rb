@@ -1,5 +1,6 @@
 # based on http://archive.alwaysmovefast.com/cracking-captchas-for-fun-and-profit.html
 
+require 'rubygems'
 require 'mini_magick'
 require 'chunky_png'
 
@@ -15,7 +16,7 @@ image.format 'png'
 image.write directory_name + '/captcha.png'
 
 # convert color to grayscale
-image = ChunkyPNG::Image.from_file('captcha.png')
+image = ChunkyPNG::Image.from_file("#{directory_name}/captcha.png")
 image.height.times do |y|
   image.row(y).each_with_index do |pixel, x|
 	image[x,y] = ChunkyPNG::Color.to_grayscale(pixel)
@@ -25,14 +26,16 @@ end
 # convert light pixel to white pixel to remove noise
 image.height.times do |y|
   image.row(y).each_with_index do |pixel, x|
-    if pixel > ChunkyPNG::Color.to_grayscale(ChunkyPNG::Color.rgb(200 , 200, 200))
-	  image[x,y] = ChunkyPNG::Color.rgb(255, 255, 255)
-	end
+    if pixel > ChunkyPNG::Color.to_grayscale(ChunkyPNG::Color.rgb(100 ,100, 100))
+      image[x,y] = ChunkyPNG::Color.rgb(255, 255, 255)
+    else
+      image[x,y] = ChunkyPNG::Color.rgb(0, 0, 0)
+    end
   end
 end
 
 image.save(directory_name + '/captcha_processed_1.png')
-
+=begin
 # "skeletonize"
 height, weight = image.dimension
 # "skeletonize" first pass
@@ -132,3 +135,4 @@ letters.each { |letter|
   fixed_image.save(directory_name + '/' + i.to_s + '.png')
   i += 1
 }
+=end
